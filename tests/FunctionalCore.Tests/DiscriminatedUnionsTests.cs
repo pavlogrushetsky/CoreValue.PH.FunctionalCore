@@ -23,7 +23,7 @@ namespace FunctionalCore.Tests
                 Union2<int, string>.Case2("1"));
 
         [Test]
-        public void TwoUnionCasesWithTheDifferentTypesShouldNotBeEqual() 
+        public void TwoUnionsWithTheDifferentTypesShouldNotBeEqual() 
             => Assert.AreNotEqual(
                 Union2<int, string>.Case1(1),
                 Union2<string, int>.Case2(1));
