@@ -246,49 +246,116 @@ namespace FunctionalCore
 
     #region Option
 
-    public abstract class Option<TValue>
+    /// <summary>
+    /// The discriminated union with two union cases: Some and None.
+    /// </summary>
+    /// <typeparam name="T">The type of the Some union case.</typeparam>
+    public abstract class Option<T>
     {
-        public abstract T Match<T>(Func<TValue, T> f1, Func<T> f2);
-        public abstract void Match(Action<TValue> f1, Action f2);
+        /// <summary>
+        /// Match the cases of the discriminated union with the corresponding functions.
+        /// </summary>
+        /// <typeparam name="T1">The type of the result value.</typeparam>
+        /// <param name="f1">The function to match with the Some union case.</param>
+        /// <param name="f2">The function to match with the None union case.</param>
+        /// <returns>The result value.</returns>
+        public abstract T1 Match<T1>(Func<T, T1> f1, Func<T1> f2);
+
+        /// <summary>
+        /// Match the cases of the discriminated union with the corresponding actions.
+        /// </summary>
+        /// <param name="f1">The action to match with the Some union case.</param>
+        /// <param name="f2">The action to match with the None union case.</param>
+        public abstract void Match(Action<T> f1, Action f2);
 
         private Option() { }
 
-        public sealed class Some : Option<TValue>
+        internal sealed class SomeCase : Option<T>
         {
-            public readonly TValue Value;
-            internal Some(TValue value) => Value = value;
-            public override T Match<T>(Func<TValue, T> f1, Func<T> f2) => f1 != null ? f1(Value) : default;
-            public override void Match(Action<TValue> f1, Action f2) => f1?.Invoke(Value);
+            internal T Value { get; }
+
+            internal SomeCase(T value) 
+                => Value = value;
+
+            /// <inheritdoc />
+            public override T1 Match<T1>(Func<T, T1> f1, Func<T1> f2) 
+                => f1 != null 
+                    ? f1(Value) 
+                    : default;
+
+            /// <inheritdoc />
+            public override void Match(Action<T> f1, Action f2) 
+                => f1?.Invoke(Value);
         }
 
-        public sealed class None : Option<TValue>
+        internal sealed class NoneCase : Option<T>
         {
-            internal None() { }
-            public override T Match<T>(Func<TValue, T> f1, Func<T> f2) => f2 != null ? f2() : default;
-            public override void Match(Action<TValue> f1, Action f2) => f2?.Invoke();
+            internal NoneCase() { }
+
+            /// <inheritdoc />
+            public override T1 Match<T1>(Func<T, T1> f1, Func<T1> f2) 
+                => f2 != null 
+                    ? f2() 
+                    : default;
+
+            /// <inheritdoc />
+            public override void Match(Action<T> f1, Action f2) 
+                => f2?.Invoke();
         }
+
+        /// <summary>
+        /// Construct a value of the Option discriminated union using the None union case.
+        /// </summary>
+        /// <returns>The value of the Option discriminated union.</returns>
+        public static Option<T> None() 
+            => new NoneCase();
+
+        /// <summary>
+        /// Apply the function to the Option discriminated union.
+        /// </summary>
+        /// <typeparam name="T1">The type of the result value.</typeparam>
+        /// <param name="map">The function to be applied.</param>
+        /// <returns>The result Option discriminated union.</returns>
+        public Option<T1> Map<T1>(Func<T, T1> map) 
+            => Match(
+                some => Some.Of(map(some)), 
+                () => new Option<T1>.NoneCase());
+
+        /// <summary>
+        /// Apply the function to the Option discriminated union.
+        /// </summary>
+        /// <typeparam name="T1">The type of the result value.</typeparam>
+        /// <param name="map">The function to be applied.</param>
+        /// <param name="defaultArg">The default value to be returned if the union equals the None union case.</param>
+        /// <returns>The result value.</returns>
+        public T1 Fold<T1>(Func<T, T1> map, T1 defaultArg) 
+            => Match(map, () => defaultArg);
     }
 
+    /// <summary>
+    /// Contains methods for constructing a value of the Option discriminated union using the Some union case.
+    /// </summary>
     public static class Some
     {
-        public static Option<T> Of<T>(T value) => new Option<T>.Some(value);
-        public static Option<T> Of<T>(T? value) where T : struct =>
-            value.HasValue
+        /// <summary>
+        /// Construct a value of the Option discriminated union using the Some union case.
+        /// </summary>
+        /// <typeparam name="T">The type of the Some union case.</typeparam>
+        /// <param name="value">The value of the Some union case.</param>
+        /// <returns>The value of the Option discriminated union.</returns>
+        public static Option<T> Of<T>(T value) 
+            => new Option<T>.SomeCase(value);
+
+        /// <summary>
+        /// Construct a value of the Option discriminated union using the Some union case.
+        /// </summary>
+        /// <typeparam name="T">The type of the Some union case.</typeparam>
+        /// <param name="value">The value of the Some union case.</param>
+        /// <returns>The value of the Option discriminated union.</returns>
+        public static Option<T> Of<T>(T? value) where T : struct 
+            => value.HasValue 
                 ? Of(value.Value)
-                : Option.None<T>();
-    }
-
-    public static class Option
-    {
-        public static Option<T> None<T>() => new Option<T>.None();
-
-        public static Option<TRes> Map<T, TRes>(this Option<T> option, Func<T, TRes> map) =>
-            option.Match(
-                some => Some.Of(map(some)),
-                None<TRes>);
-
-        public static TRes Fold<T, TRes>(this Option<T> option, Func<T, TRes> map, TRes defaultArg) =>
-            option.Match(map, () => defaultArg);
+                : Option<T>.None();
     }
 
     #endregion
