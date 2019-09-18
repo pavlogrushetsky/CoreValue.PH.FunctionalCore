@@ -2,11 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Pavlo Hrushetskyi</Authors>
     <Company>CoreValue</Company>
     <PackageId>CoreValue.PH.FunctionalCore</PackageId>
-    <Description>Algebraic data types and functional expression implemented in C#.</Description>
+    <Description>Algebraic data types and functional expressions implemented in C#.</Description>
+    <RepositoryUrl>https://github.com/pavlogrushetsky/CoreValue.PH.FunctionalCore.git</RepositoryUrl>
+    <RepositoryType>Public</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

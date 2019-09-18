@@ -9,4 +9,8 @@
     <OutputPath>..\..\bin\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CoreValue.PH.FunctionalCore" Version="1.0.0" />
+  </ItemGroup>
+
 </Project>
