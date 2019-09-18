@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalCore", "src\FunctionalCore\FunctionalCore.csproj", "{401C4B19-EC9A-414F-BD3A-C92EF1A0363B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalCore.Tests", "tests\FunctionalCore.Tests\FunctionalCore.Tests.csproj", "{58E3FD65-19B1-41F4-BC9C-2B4F8880BDEA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{401C4B19-EC9A-414F-BD3A-C92EF1A0363B} = {401C4B19-EC9A-414F-BD3A-C92EF1A0363B}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalCore.Client", "src\FunctionalCore.Client\FunctionalCore.Client.csproj", "{77C968BD-5AAA-440E-884B-A66110FCE4EC}"
 EndProject

@@ -4,31 +4,105 @@ namespace FunctionalCore
 {
     #region Discriminated Unions
 
+    /// <summary>
+    /// The discriminated union with two union cases.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first union case.</typeparam>
+    /// <typeparam name="T2">The type of the second union case.</typeparam>
     public abstract class Union2<T1, T2>
     {
+        /// <summary>
+        /// Match the cases of the discriminated union with the corresponding functions.
+        /// </summary>
+        /// <typeparam name="T">The type of the result value.</typeparam>
+        /// <param name="f1">The function to match with the first union case.</param>
+        /// <param name="f2">The function to match with the second union case.</param>
+        /// <returns>The result value.</returns>
         public abstract T Match<T>(Func<T1, T> f1, Func<T2, T> f2);
+
+        /// <summary>
+        /// Match the cases of the discriminated union with the corresponding actions.
+        /// </summary>
+        /// <param name="f1">The action to match with the first union case.</param>
+        /// <param name="f2">The action to match with the second union case.</param>
         public abstract void Match(Action<T1> f1, Action<T2> f2);
 
         private Union2() { }
 
-        public sealed class Case1 : Union2<T1, T2>
+        internal sealed class UnionCase1 : Union2<T1, T2>
         {
-            public readonly T1 Item;
-            internal Case1(T1 item) => Item = item;
-            public override T Match<T>(Func<T1, T> f1, Func<T2, T> f2) => f1 != null ? f1(Item) : default;
-            public override void Match(Action<T1> f1, Action<T2> f2) => f1?.Invoke(Item);
+            internal readonly T1 Item;
+
+            internal UnionCase1(T1 item) 
+                => Item = item;
+
+            /// <inheritdoc />
+            public override T Match<T>(Func<T1, T> f1, Func<T2, T> f2) 
+                => f1 != null 
+                    ? f1(Item) 
+                    : default;
+
+            /// <inheritdoc />
+            public override void Match(Action<T1> f1, Action<T2> f2) 
+                => f1?.Invoke(Item);
         }
 
-        public sealed class Case2 : Union2<T1, T2>
+        internal sealed class UnionCase2 : Union2<T1, T2>
         {
-            public readonly T2 Item;
-            internal Case2(T2 item) => Item = item;
-            public override T Match<T>(Func<T1, T> f1, Func<T2, T> f2) => f2 != null ? f2(Item) : default;
-            public override void Match(Action<T1> f1, Action<T2> f2) => f2?.Invoke(Item);
+            internal readonly T2 Item;
+
+            internal UnionCase2(T2 item) 
+                => Item = item;
+
+            /// <inheritdoc />
+            public override T Match<T>(Func<T1, T> f1, Func<T2, T> f2) 
+                => f2 != null 
+                    ? f2(Item) 
+                    : default;
+
+            /// <inheritdoc />
+            public override void Match(Action<T1> f1, Action<T2> f2) 
+                => f2?.Invoke(Item);
         }
 
-        public static Union2<T1, T2> Case(T1 value) => new Case1(value);
-        public static Union2<T1, T2> Case(T2 value) => new Case2(value);
+        /// <summary>
+        /// Construct a value of the discriminated union using the first union case.
+        /// </summary>
+        /// <param name="value">The value of the first union case.</param>
+        /// <returns>The discriminated union value.</returns>
+        public static Union2<T1, T2> Case1(T1 value) 
+            => new UnionCase1(value);
+
+        /// <summary>
+        /// Construct a value of the discriminated union using the second union case.
+        /// </summary>
+        /// <param name="value">The value of the second union case.</param>
+        /// <returns>The discriminated union value.</returns>
+        public static Union2<T1, T2> Case2(T2 value) 
+            => new UnionCase2(value);
+
+        #region Equality
+
+        public override bool Equals(object obj) 
+            => obj is Union2<T1, T2> other 
+               && Equals(other);
+
+        protected bool Equals(Union2<T1, T2> other) 
+            => other != null 
+               && other.Match(
+                   otherCase1 => Match(
+                       thisCase1 => otherCase1.Equals(thisCase1), 
+                       thisCase2 => false),
+                   otherCase2 => Match(
+                       thisCase1 => false, 
+                       thisCase2 => otherCase2.Equals(thisCase2)));
+
+        public override int GetHashCode() 
+            => Match(
+                case1 => case1.GetHashCode(), 
+                case2 => case2.GetHashCode());
+
+        #endregion
     }
 
     public abstract class Union3<T1, T2, T3>

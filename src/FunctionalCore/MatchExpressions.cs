@@ -18,19 +18,19 @@ namespace FunctionalCore
             Arg = arg;
 
         public WithExpression<TArg, TRes> With<TRes>(TArg arg, Func<TArg, TRes> match) =>
-            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, null));
+            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, null));
 
         public WithExpression<TArg, TRes> With<TRes>(Func<TArg, bool> arg, Func<TArg, TRes> match) =>
-            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, null));
+            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, null));
 
         public WithExpression<TArg, TRes> With<TRes>(TArg[] arg, Func<TArg, TRes> match) =>
-            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case1(arg), match, null));
+            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case1(arg), match, null));
 
         public WithExpression<TArg, TRes> WithWhen<TRes>(TArg arg, Func<TArg, TRes> match, Func<bool> when) =>
-            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, when));
+            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, when));
 
         public WithExpression<TArg, TRes> WithWhen<TRes>(Func<TArg, bool> arg, Func<TArg, TRes> match, Func<bool> when) =>
-            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, when));
+            new WithExpression<TArg, TRes>(Arg, new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, when));
     }
 
     public sealed class WithExpression<TArg, TRes>
@@ -51,16 +51,16 @@ namespace FunctionalCore
             : this(arg, new List<Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>> { expr }) { }
 
         public WithExpression<TArg, TRes> With(TArg arg, Func<TArg, TRes> match) =>
-            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, null)));
+            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, null)));
 
         public WithExpression<TArg, TRes> With(Func<TArg, bool> arg, Func<TArg, TRes> match) =>
-            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, null)));
+            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, null)));
 
         public WithExpression<TArg, TRes> WithWhen(TArg arg, Func<TArg, TRes> match, Func<bool> when) =>
-            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, when)));
+            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case1(new[] { arg }), match, when)));
 
         public WithExpression<TArg, TRes> WithWhen(Func<TArg, bool> arg, Func<TArg, TRes> match, Func<bool> when) =>
-            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(new Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, when)));
+            new WithExpression<TArg, TRes>(Arg, _expr.Add(new Tuple<Union2<TArg[], Func<TArg, bool>>, Func<TArg, TRes>, Func<bool>>(Union2<TArg[], Func<TArg, bool>>.Case2(arg), match, when)));
 
         public WithDefaultExpression<TArg, TRes> WithDefault(Func<TArg, TRes> match) =>
             new WithDefaultExpression<TArg, TRes>(Arg, Expr, match);
