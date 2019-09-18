@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/bin
+/tests/FunctionalCore.Tests/obj
+/src/FunctionalCore/obj
+/src/FunctionalCore.Client/obj
